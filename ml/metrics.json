@@ -1,0 +1,29 @@
+{
+    "Accuracy": 0.9105392156862745,
+    "Precision (Weighted)": 1.0,
+    "Recall (Weighted)": 0.9105392156862745,
+    "F1-Score (Weighted)": 0.9531751122514432,
+    "ROC-AUC (Weighted)": NaN,
+    "Per-Class": {
+        "cataract": {
+            "Precision": 0.0,
+            "Recall": 0.0,
+            "F1-Score": 0.0
+        },
+        "diabetic_retinopathy": {
+            "Precision": 0.0,
+            "Recall": 0.0,
+            "F1-Score": 0.0
+        },
+        "glaucoma": {
+            "Precision": 0.0,
+            "Recall": 0.0,
+            "F1-Score": 0.0
+        },
+        "normal": {
+            "Precision": 1.0,
+            "Recall": 0.9105392156862745,
+            "F1-Score": 0.9531751122514432
+        }
+    }
+}
