@@ -1,0 +1,17 @@
+{
+  "name": "clarieye-monorepo",
+  "version": "1.0.0",
+  "description": "Unified repository for the ClariEye Retinal Diagnostic Platform",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix client && npm install --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "node server/index.js",
+    "dev:ml": "cd ml && python serve.py",
+    "prisma:push": "npx prisma db push --schema=server/prisma/schema.prisma",
+    "setup": "npm run install:all && npm run prisma:push"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,75 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  name      String
+  role      String    @default("Doctor")
+  twoFactorSecret  String?
+  isTwoFactorEnabled Boolean @default(false)
+  createdAt DateTime  @default(now())
+  patients  Patient[]
+  appointments Appointment[]
+  auditLogs    AuditLog[]
+}
+
+model Patient {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  age       Int
+  eye       String
+  scans     Scan[]
+  appointments Appointment[]
+  createdAt DateTime @default(now())
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+  patientId Int
+  patient   Patient  @relation(fields: [patientId], references: [id])
+  doctorId  Int
+  doctor    User     @relation(fields: [doctorId], references: [id])
+  date      DateTime
+  status    String   @default("Scheduled") // Scheduled, Completed, Cancelled
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  resource  String
+  details   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model Scan {
+  id                Int      @id @default(autoincrement())
+  patientId         Int
+  patient           Patient  @relation(fields: [patientId], references: [id])
+  primaryDiagnosis  String
+  confidence        Float
+  urgency           String
+  originalImagePath String?
+  heatmapImagePath  String?
+  secondaryConfidence Float?
+  consensusScore    Float?
+  annotations       Json?
+  clinicianNotes    String?   @db.Text
+  severityStage     String?
+  doctorFeedback    String?
+  createdAt         DateTime @default(now())
+}

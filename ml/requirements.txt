@@ -1,0 +1,12 @@
+tensorflow>=2.15.0
+keras>=3.0.0
+numpy<2.0.0
+Pillow
+opencv-python
+fastapi
+uvicorn
+pydantic
+python-multipart
+# Add any specialized scientific libs if needed
+scipy
+matplotlib
