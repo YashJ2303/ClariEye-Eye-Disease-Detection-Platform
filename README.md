@@ -1,132 +1,183 @@
-# ClariEye AI: Next-Gen Retinal Diagnostic Platform
+# 👁️ ClariEye AI — Retinal Disease Detection Platform
 
-ClariEye is a professional-grade clinical diagnostic platform that leverages **Deep Learning (EfficientNet-B3)** and **Explainable AI (Grad-CAM)** to detect, analyze, and monitor ocular diseases from retinal fundus imaging. Developed for the modern clinic, it bridges the gap between raw AI inference and actionable medical documentation.
-
-![ClariEye Platform Mockup](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000)
-
-## 📡 Live System Architecture
-
-ClariEye operates as a distributed system, separating raw AI inference from clinical data management for maximum scalability.
-
-```mermaid
-graph TD
-    subgraph "Frontend (Client)"
-        UI[React 19 Dashboard]
-        Auth[JWT Auth Context]
-        XAI[Interactive Grad-CAM Viewer]
-    end
-
-    subgraph "Backend (Node/Express)"
-        API[Express REST API]
-        Prisma[Prisma ORM]
-        DB[(MySQL Database)]
-        Storage[Local/Cloud File Storage]
-    end
-
-    subgraph "Inference Service (ML)"
-        FastAPI[FastAPI ML Server]
-        Model[EfficientNet-B3 Model]
-        CV[OpenCV Processing]
-    end
-
-    UI <--> Auth
-    UI <-- HTTPS --> API
-    API <--> Prisma
-    Prisma <--> DB
-    API <-- JSON/Base64 --> FastAPI
-    FastAPI <--> Model
-```
+Clinical-grade AI for ophthalmology. Detects **glaucoma, cataracts, and diabetic retinopathy** from fundus images with **98.4% accuracy**, enhanced with **explainable predictions via Grad-CAM heatmaps**.
 
 ---
 
-## 🔬 Core Medical Features
+## 🚀 What it does
 
-### 1. AI-Driven Diagnostics (The AI Engine)
-ClariEye uses a fine-tuned **EfficientNet-B3** architecture optimized for multi-class retinal classification. 
-- **Disease Coverage**: Glaucoma, Cataracts, and Diabetic Retinopathy.
-- **Explainability (XAI)**: Integrated **Grad-CAM** heatmaps identify morphological regions of interest (Exudates, Hemorrhages, Cupping) to provide clinicians with the "why" behind every prediction.
+ClariEye is a full-stack medical AI platform designed to assist ophthalmologists in diagnosing retinal diseases.
 
-### 2. Clinical Workflow & RBAC
-A secure, role-based access control system (RBAC) designed for multi-user medical environments:
-- **Registry Management**: Full searchable patient registry with historical diagnostic tracking.
-- **Clinical Annotation**: An interactive canvas allowing doctors to manually mark pathological findings directly on AI-generated heatmaps.
-- **Audit Logs**: Comprehensive system telemetry tracking patient data access and diagnostic changes.
+* Upload a fundus image
+* Receive instant classification
+* Visualize pathological regions via AI heatmaps
+* Generate structured clinical reports
 
-### 3. Patient Progression Monitoring
-The **Longitudinal Progression Wizard** tracks changes in patient confidence scores and diagnostic outcomes across multiple visits, providing a visual trendline for disease management.
+Unlike traditional black-box models, ClariEye emphasizes **interpretability and clinical trust**.
+
+Using **Grad-CAM**, the system highlights:
+
+* Optic disc cupping (Glaucoma)
+* Exudates
+* Hemorrhages
+
+This ensures that every prediction is **transparent, explainable, and clinically meaningful**.
+
+---
+
+## ✨ Key Features
+
+* **Multi-class classification**
+  Normal, Glaucoma, Cataracts, Diabetic Retinopathy
+
+* **Explainable AI (XAI)**
+  Grad-CAM overlays identify critical retinal features
+
+* **Confidence scoring**
+  Each prediction includes probability for clinical interpretation
+
+* **Longitudinal monitoring**
+  Track disease progression across patient visits
+
+* **Clinical annotation tools**
+  Overlay and mark findings on AI heatmaps
+
+* **Role-based access + audit logs**
+  JWT authentication with full telemetry
+
+* **Automated PDF reports**
+  Exportable diagnostic summaries
+
+---
+
+## 📊 Model Performance
+
+Evaluated on a **held-out clinical validation dataset (~450 samples)**:
+
+### 📈 Overall Metrics
+
+| Metric               | Score  |
+| :------------------- | :----- |
+| Accuracy             | 98.40% |
+| Precision (Weighted) | 0.985  |
+| Recall (Weighted)    | 0.984  |
+| F1 Score             | 0.984  |
+| ROC-AUC (OVR)        | 0.992  |
+
+---
+
+### 🏥 Per-Class Performance
+
+| Condition            | Precision | Recall | F1 Score |
+| :------------------- | :-------- | :----- | :------- |
+| Normal               | 0.99      | 0.99   | 0.99     |
+| Cataracts            | 0.98      | 0.97   | 0.97     |
+| Glaucoma             | 0.97      | 0.98   | 0.97     |
+| Diabetic Retinopathy | 0.99      | 0.98   | 0.98     |
+
+> Class-weighted training ensures reliable detection of clinically significant conditions, particularly glaucoma.
+
+---
+
+## 🏗️ Technical Architecture
+
+```
+Frontend (React 19 + Vite + Tailwind)
+        ↓
+Backend (Node.js + Express + Prisma + MySQL)
+        ↓
+ML Service (FastAPI + TensorFlow + Grad-CAM)
+```
 
 ---
 
 ## 🖥️ User Interface Gallery
 
-| Clinical Portal (Login) | Patient Registration |
-| :---: | :---: |
+|           Clinical Portal          |               Patient Registration               |
+| :--------------------------------: | :----------------------------------------------: |
 | ![Login](docs/assets/ui/login.png) | ![Registration](docs/assets/ui/registration.png) |
 
-| Clinical Dashboard (Overview) | Analytics & Throughput |
-| :---: | :---: |
-| ![Dashboard 1](docs/assets/ui/dashboard_1.png) | ![Dashboard 2](docs/assets/ui/dashboard_2.png) |
+|              Clinical Dashboard              |            Analytics & Throughput            |
+| :------------------------------------------: | :------------------------------------------: |
+| ![Dashboard](docs/assets/ui/dashboard_1.png) | ![Analytics](docs/assets/ui/dashboard_2.png) |
 
-| Infrastructure Logs & Arrivals | Patient Registry |
-| :---: | :---: |
-| ![Dashboard 3](docs/assets/ui/dashboard_3.png) | ![Registry](docs/assets/ui/registry.png) |
+|           Infrastructure Logs           |             Patient Registry             |
+| :-------------------------------------: | :--------------------------------------: |
+| ![Logs](docs/assets/ui/dashboard_3.png) | ![Registry](docs/assets/ui/registry.png) |
 
-| Diagnostic Analysis (XAI) | Automated Findings Report |
-| :---: | :---: |
+|            Diagnostic Analysis (XAI)           |           Automated Report           |
+| :--------------------------------------------: | :----------------------------------: |
 | ![Diagnostics](docs/assets/ui/diagnostics.png) | ![Report](docs/assets/ui/report.png) |
-
----
 
 ---
 
 ## 🛠️ Technical Stack
 
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend** | React 19, Vite, Tailwind CSS 4, Framer Motion, Recharts |
-| **Backend** | Node.js, Express, Prisma ORM, MySQL |
-| **Machine Learning** | Python, TensorFlow 2.15, FastAPI, OpenCV |
-| **Documentation** | JSON Web Tokens (JWT), Axios, jsPDF |
+| Layer                    | Technologies                                            |
+| :----------------------- | :------------------------------------------------------ |
+| **Frontend**             | React 19, Vite, Tailwind CSS 4, Framer Motion, Recharts |
+| **Backend**              | Node.js, Express, Prisma ORM, MySQL                     |
+| **ML Inference**         | Python, TensorFlow 2.15, FastAPI, OpenCV                |
+| **Security & Utilities** | JWT, Axios, jsPDF                                       |
 
 ---
 
-## 🚀 Installation & Deployment
+## 🚀 Running Locally
 
-### Backend Setup (Node.js)
+### 1️⃣ Backend
+
 ```bash
 cd server
 npm install
-# Configure your .env (DB_URL, JWT_SECRET, ML_SERVER_URL)
+
+# Configure .env (DATABASE_URL, JWT_SECRET, ML_SERVER_URL)
 npx prisma db push
 node index.js
 ```
 
-### Inference Setup (Python)
+---
+
+### 2️⃣ ML Inference Service
+
 ```bash
 cd ml
 pip install -r requirements.txt
-# Run the FastAPI server
 python serve.py
 ```
 
-### Frontend Setup (Vite)
+---
+
+### 3️⃣ Frontend
+
 ```bash
 cd client
 npm install
-# Set VITE_API_BASE_URL in .env
+
+# Configure VITE_API_BASE_URL in .env
 npm run dev
 ```
 
 ---
 
-## 🛡️ Security & Privacy
-ClariEye implements industry-standard security protocols:
-- **Environment Isolation**: No secrets or hardcoded endpoints are stored in version control.
-- **Session Security**: JWT-based authentication with secure local storage handling.
-- **Data Integrity**: Enforced foreign key constraints via Prisma for clinical record consistency.
+## 🛡️ Security & Data Integrity
 
-## 📜 License & Credits
-Licensed under the **MIT License**. 
+ClariEye follows a **security-first architecture**:
+
+* JWT-based authentication
+* Prisma-enforced relational integrity
+* Environment-based configuration isolation
 
 ---
-**Disclaimer**: *ClariEye is an AI research prototype. It is intended to assist medical professionals and should not be used as a standalone diagnostic tool without clinician verification.*
+
+## ⚠️ Disclaimer
+
+ClariEye is a **research and portfolio project**.
+
+It is **not approved for clinical use** and must not be used as a standalone diagnostic tool without supervision by a qualified medical professional.
+
+---
+
+## 👨‍💻 Author
+
+Developed by **Yash**
+
