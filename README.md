@@ -1,68 +1,132 @@
-# ClariEye AI - Professional Retinal Diagnostic Platform
+# ClariEye AI: Next-Gen Retinal Diagnostic Platform
 
-ClariEye is an advanced clinical diagnostic platform that leverages deep learning to detect and monitor eye diseases from retinal fundus images. Built for medical professionals, it provides a seamless workflow from scanning to longitudinal analysis and clinician-verified reporting.
+ClariEye is a professional-grade clinical diagnostic platform that leverages **Deep Learning (EfficientNet-B3)** and **Explainable AI (Grad-CAM)** to detect, analyze, and monitor ocular diseases from retinal fundus imaging. Developed for the modern clinic, it bridges the gap between raw AI inference and actionable medical documentation.
 
-![ClariEye Hero Mockup](https://images.unsplash.com/photo-1576091160550-217359f41f48?auto=format&fit=crop&q=80&w=2000)
+![ClariEye Platform Mockup](https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000)
 
-## 🌟 Key Features
+## 📡 Live System Architecture
 
-- **AI-Powered Diagnostics**: Detects Cataracts, Glaucoma, and Diabetic Retinopathy with high confidence.
-- **Explainable AI (XAI)**: Generates Grad-CAM heatmaps to visualize exactly where the model detects pathology.
-- **Longitudinal Monitoring**: Track disease progression over time with the "Progression Wizard" and comparative clinical history.
-- **Clinical Annotation**: Interactive canvas for marking specific regions of interest (exudates, hemorrhages, etc.).
-- **Professional Reporting**: One-click PDF report generation for institutional documentation.
-- **Security & Compliance**: Role-based access control (RBAC), audit logging, and secure credentialing.
-- **AI Clinician Assistant**: Real-time chat for diagnostic support and educational insights.
+ClariEye operates as a distributed system, separating raw AI inference from clinical data management for maximum scalability.
 
-## 🏗️ Architecture
+```mermaid
+graph TD
+    subgraph "Frontend (Client)"
+        UI[React 19 Dashboard]
+        Auth[JWT Auth Context]
+        XAI[Interactive Grad-CAM Viewer]
+    end
 
-- **Frontend**: React 19, Vite, Tailwind CSS 4, Framer Motion, Lucide React.
-- **Backend**: Node.js, Express, Prisma (MySQL), JWT Authentication.
-- **Deep Learning**: Python, TensorFlow/Keras, EfficientNet-B0, FastAPI.
+    subgraph "Backend (Node/Express)"
+        API[Express REST API]
+        Prisma[Prisma ORM]
+        DB[(MySQL Database)]
+        Storage[Local/Cloud File Storage]
+    end
+
+    subgraph "Inference Service (ML)"
+        FastAPI[FastAPI ML Server]
+        Model[EfficientNet-B3 Model]
+        CV[OpenCV Processing]
+    end
+
+    UI <--> Auth
+    UI <-- HTTPS --> API
+    API <--> Prisma
+    Prisma <--> DB
+    API <-- JSON/Base64 --> FastAPI
+    FastAPI <--> Model
+```
 
 ---
 
-## 🚀 Getting Started
+## 🔬 Core Medical Features
 
-### 1. Prerequisites
-- Node.js (v18+)
-- Python (v3.9+)
-- MySQL Database
+### 1. AI-Driven Diagnostics (The AI Engine)
+ClariEye uses a fine-tuned **EfficientNet-B3** architecture optimized for multi-class retinal classification. 
+- **Disease Coverage**: Glaucoma, Cataracts, and Diabetic Retinopathy.
+- **Explainability (XAI)**: Integrated **Grad-CAM** heatmaps identify morphological regions of interest (Exudates, Hemorrhages, Cupping) to provide clinicians with the "why" behind every prediction.
 
-### 2. Backend Setup (`/server`)
+### 2. Clinical Workflow & RBAC
+A secure, role-based access control system (RBAC) designed for multi-user medical environments:
+- **Registry Management**: Full searchable patient registry with historical diagnostic tracking.
+- **Clinical Annotation**: An interactive canvas allowing doctors to manually mark pathological findings directly on AI-generated heatmaps.
+- **Audit Logs**: Comprehensive system telemetry tracking patient data access and diagnostic changes.
+
+### 3. Patient Progression Monitoring
+The **Longitudinal Progression Wizard** tracks changes in patient confidence scores and diagnostic outcomes across multiple visits, providing a visual trendline for disease management.
+
+---
+
+## 🖥️ User Interface Gallery
+
+| Clinical Portal (Login) | Patient Registration |
+| :---: | :---: |
+| ![Login](docs/assets/ui/login.png) | ![Registration](docs/assets/ui/registration.png) |
+
+| Clinical Dashboard (Overview) | Analytics & Throughput |
+| :---: | :---: |
+| ![Dashboard 1](docs/assets/ui/dashboard_1.png) | ![Dashboard 2](docs/assets/ui/dashboard_2.png) |
+
+| Infrastructure Logs & Arrivals | Patient Registry |
+| :---: | :---: |
+| ![Dashboard 3](docs/assets/ui/dashboard_3.png) | ![Registry](docs/assets/ui/registry.png) |
+
+| Diagnostic Analysis (XAI) | Automated Findings Report |
+| :---: | :---: |
+| ![Diagnostics](docs/assets/ui/diagnostics.png) | ![Report](docs/assets/ui/report.png) |
+
+---
+
+---
+
+## 🛠️ Technical Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Frontend** | React 19, Vite, Tailwind CSS 4, Framer Motion, Recharts |
+| **Backend** | Node.js, Express, Prisma ORM, MySQL |
+| **Machine Learning** | Python, TensorFlow 2.15, FastAPI, OpenCV |
+| **Documentation** | JSON Web Tokens (JWT), Axios, jsPDF |
+
+---
+
+## 🚀 Installation & Deployment
+
+### Backend Setup (Node.js)
 ```bash
 cd server
 npm install
-# Copy .env.example to .env and configure your DATABASE_URL and JWT_SECRET
+# Configure your .env (DB_URL, JWT_SECRET, ML_SERVER_URL)
 npx prisma db push
 node index.js
 ```
 
-### 3. ML Server Setup (`/ml`)
+### Inference Setup (Python)
 ```bash
 cd ml
 pip install -r requirements.txt
-# To serve the model:
+# Run the FastAPI server
 python serve.py
-# To train (if dataset is present):
-python train.py
 ```
 
-### 4. Frontend Setup (`/client`)
+### Frontend Setup (Vite)
 ```bash
 cd client
 npm install
-# Copy .env.example to .env and configure VITE_API_BASE_URL
+# Set VITE_API_BASE_URL in .env
 npm run dev
 ```
 
 ---
 
-## 🛡️ Security Note
-This project is designed for clinical research. Ensure all environment variables (DB URLs, API Keys, JWT Secrets) are kept private and never committed to version control. Use the provided `.env.example` templates for configuration.
+## 🛡️ Security & Privacy
+ClariEye implements industry-standard security protocols:
+- **Environment Isolation**: No secrets or hardcoded endpoints are stored in version control.
+- **Session Security**: JWT-based authentication with secure local storage handling.
+- **Data Integrity**: Enforced foreign key constraints via Prisma for clinical record consistency.
 
-## 📜 License
-Distributed under the MIT License. See `LICENSE` for more information.
+## 📜 License & Credits
+Licensed under the **MIT License**. 
 
 ---
-**Disclaimer**: ClariEye is a research tool and does NOT replace professional medical diagnosis.
+**Disclaimer**: *ClariEye is an AI research prototype. It is intended to assist medical professionals and should not be used as a standalone diagnostic tool without clinician verification.*
